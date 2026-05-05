@@ -61,7 +61,7 @@ void quick_sort(Iterator begin, Iterator end)
 
     Iterator pivot = partition(begin, end);
     
-    quick_sort(begin, pivot);
+    quick_sort(begin, std::next(pivot));
     quick_sort(std::next(pivot), end);
 }
 
