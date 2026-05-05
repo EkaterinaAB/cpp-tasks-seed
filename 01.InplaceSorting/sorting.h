@@ -28,7 +28,7 @@ void bubble_sort(Iterator begin, Iterator end)
 template <typename Iterator>
 Iterator partition(Iterator begin, Iterator end) {
 
-    Iterator pivot = (begin + end) / 2;
+    Iterator pivot = begin + (begin - end) / 2;
     auto pivot_value = *pivot;
     
     Iterator i = begin;
