@@ -6,7 +6,6 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <errno.h>
-#include <iostream>
 
 #include "base85ed.h"
 
@@ -60,8 +59,6 @@ std::vector<uint8_t> base85::encode(std::vector<uint8_t> const &bytes)
                 (static_cast<uint32_t>(block[2]) << 8) |
                 static_cast<uint32_t>(block[3]);
 
-        std::cout<<block[0]<<' ' << value <<'\n';
-
         uint8_t digits[5];
         for (int j = 4; j >= 0; --j)
         {
@@ -112,6 +109,10 @@ std::vector<uint8_t> base85::decode(std::vector<uint8_t> const &b85str)
         {
             uint8_t ch = b85str[i];
             uint8_t index = base85_table[ch];
+            if (index == 255)
+            {
+                throw std::runtime_error("Invalid Base85 character");
+            }
             indices[b85str_size++] = index;
             ++i;
         }
@@ -141,3 +142,4 @@ std::vector<uint8_t> base85::decode(std::vector<uint8_t> const &b85str)
     }
     return res;
 }
+
