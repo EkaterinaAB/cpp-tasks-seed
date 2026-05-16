@@ -69,9 +69,57 @@ std::vector<uint8_t> base85::encode(std::vector<uint8_t> const &bytes)
     return res;
 }
 
+static const uint8_t* build_map() {
+    static uint8_t base85_table[256];
+    static bool initialized = false;
+    if (!initialized) {
+        for (int i = 0; i < 256; ++i) base85_table[i] = 255; 
+        for (int i = 0; i < 85; ++i) {
+            base85_table[static_cast<uint8_t>(base85_alphabet[i])] = i;
+        }
+        initialized = true;
+    }
+    return base85_table;
+}
 
 // TODO: implement this in C++
 std::vector<uint8_t> base85::decode(std::vector<uint8_t> const &b85str)
 {
- 
+    const uint8_t* base85_table = build_map();
+    std::vector<uint8_t> res;
+    size_t i = 0;
+    const size_t n = b85str.size();
+
+    while (i < n) {
+        uint8_t indices[5];
+        size_t b85str_size = 0;
+        while (i < n && b85str_size < 5) {
+            uint8_t ch = b85str[i];
+            uint8_t index = base85_table[ch];
+            indices[b85str_size++] = index;
+            ++i;
+        }
+
+        if (b85str_size == 0) continue;
+
+        size_t res_bytes = (b85str_size == 5) ? 4 : (b85str_size - 1);
+        
+        while (b85str_size < 5) {
+            indices[b85str_size++] = 84;
+        }
+
+        uint32_t value = 0;
+        for (size_t j = 0; j < 5; ++j) {
+            value = value * 85 + indices[j];
+        }
+
+        uint8_t bytes[4];
+        bytes[0] = (value >> 24) & 0xFF;
+        bytes[1] = (value >> 16) & 0xFF;
+        bytes[2] = (value >> 8) & 0xFF;
+        bytes[3] = value & 0xFF;
+
+        res.insert(res.end(), bytes, bytes + res_bytes);
+    }
+    return res;
 }
