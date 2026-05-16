@@ -109,3 +109,9 @@ TEST(Base85DecodeEncodeLong, RoundLong_2)
         EXPECT_EQ(result, true_word);
     }
 }
+
+TEST(Base85Error, InvalidCharacter)
+{
+    std::vector<uint8_t> string_with_invalid = cstr2v("F/F");
+    EXPECT_THROW(base85::decode(string_with_invalid), std::runtime_error);
+}
