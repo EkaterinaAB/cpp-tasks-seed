@@ -56,6 +56,12 @@ public:
         return value < other.value;
     }
 
+    bool operator<=(const CollectingValue& other) const
+    {
+        comps++;
+        return value <= other.value;
+    }
+
     // Для std::iota
     CollectingValue& operator++()
     {
