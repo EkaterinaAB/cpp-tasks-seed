@@ -32,7 +32,7 @@ template <typename Iterator>
 Iterator partition(Iterator begin, Iterator end)
 {
 
-    Iterator pivot = begin + (begin - end) / 2;
+    Iterator pivot = begin + (end - begin) / 2;
     auto pivot_value = *pivot;
 
     Iterator i = begin;
@@ -65,7 +65,7 @@ Iterator partition(Iterator begin, Iterator end)
 template <typename Iterator>
 void quick_sort(Iterator begin, Iterator end)
 {
-    if (end - begin <= 1) return;
+    if ((end - begin) <= 1 || (begin+2 == end && *begin <= *std::prev(end)))  return;
 
     Iterator pivot = partition(begin, end);
 
