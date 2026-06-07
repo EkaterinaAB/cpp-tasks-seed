@@ -20,7 +20,7 @@ void bubble_sort(Iterator begin, Iterator end)
 
         for (Iterator j = i; j != std::prev(end); ++j)
         {
-            if (*j > *std::next(j))
+            if (*std::next(j) < *j)
             {
                 std::iter_swap(j, std::next(j));
             }
@@ -45,7 +45,7 @@ Iterator partition(Iterator begin, Iterator end)
             ++i;
         }
 
-        while (*j > pivot_value)
+        while (pivot_value < *j)
         {
             --j;
         }
